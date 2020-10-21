@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>网页没找到</title>
+    <style>
+        body {
+            background-color: #15ab84;
+        }
+
+        .page-not-found-404 {
+            text-align: center;
+        }
+
+        .page-not-found-404 span {
+            display: block;
+            margin-top: -30px;
+        }
+
+        .page-not-found-404 img {
+            margin-top: 100px;
+        }
+
+        .page-not-found-404 a {
+            text-decoration: none;
+            color: white;
+            border-radius: 4px;
+            width: 80px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div>
+        <div class="page-not-found-404">
+            <img src="{% static 'images/filebg/404.gif' %}">
+            <span>
+                <a href="{% url 'home:home' %}">返回首页</a>
+            </span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+/*video*/
+.sort-page {
+    margin-top: 20px;
+}
+
+.sort-page > nav > ul > li > a {
+    margin-left: 10px;
+}
+
+/*search*/
+.nav > li:nth-child(2) > a {
+    background-color: #23b8ff !important;
+}
+
+/*video-player*/
+.video-player-container {
+    margin-top: 20px;
+    display: inline-block;
+    position: relative;
+    background-color: #000000;
+}
+
+.js-task-list-section {
+    margin-top: 20px;
+    float: right;
+    width: 300px;
+    height: 550px;
+    position: relative;
+    display: inline-block;
+    background-color: #131313;
+    box-sizing: border-box;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.js-task-list-section::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.js-task-list-section::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .5);
+    background-color: #f8f8f8;
+}
+
+.js-task-list-section::-webkit-scrollbar-thumb:hover {
+    background-color: #aaaaaa;
+}
+
+.js-task-list-section::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, .3), inset 0 0 5px rgba(0, 0, 0, .3);
+    background-color: #cccccc;
+    min-height: 10px;
+    border-radius: 10px;
+}
+
+.js-study-task-list {
+    width: 100%;
+    padding: 20px 30px;
+    color: #c7c7c7;
+    font-size: 14px;
+}
+
+.sub-section {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    position: relative;
+    list-style: none outside none;
+}
+
+.sub-section h5 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.sub-section > a {
+    color: #c7c7c7;
+    text-decoration: none;
+}
+
+.sub-section > a:hover, .sub-section:hover {
+    color: #23b8ff;
+}
+
+.task-item--suffix {
+    font-size: 12px;
+    line-height: 16px;
+    color: #777;
+    white-space: nowrap;
+}
+
+.video-js .vjs-big-play-button {
+    margin-left: 45%;
+    margin-top: 25%;
+}
+
+.course_describe {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    background-color: #333333;
+}
+
+.course_describe p {
+    margin: -30px 10px -30px 10px;
+    color: #c7c7c7;
+}
+
+.delete-video {
+    float: right;
+    font-size: 12px;
+    height: 20px;
+    width: 30px;
+    padding: 0;
+    background-color: #131313;
+}
+
+.delete-video:hover {
+    color: #12a7ff;
+    background-color: #666666;
+}
+
+.glyphicon-stop {
+    top: 0;
+}

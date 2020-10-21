@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/homeworkapp/homewrok.css' %}">
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/homeworkapp/homework.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="question">
+                <form method="post" action="{% url 'homework:modification' %}">
+                    {% csrf_token %}
+                    <input name="homework-id" hidden value="{{ homework_id }}">
+                    <ul class="homework-pd-modification-ul">
+                        <h5>一、判断题</h5>
+                        {% for question in pd_question_list %}
+                            <li>
+                                <h5>{{ forloop.counter }}.&nbsp;{{ question.1 }}<textarea
+                                        class="form-control" name="{{ question.0 }}">{{ question.1 }}</textarea></h5>
+                                <input name="answer{{ question.0 }}" type="radio" value="true"
+                                        {% if question.2 == 'true' %} checked {% endif %}/>正确
+                                <input name="answer{{ question.0 }}" type="radio" value="false"
+                                        {% if question.2 == 'false' %} checked {% endif %}/>错误
+                                <button type="button" value="{{ question.0 }}" name="delete-question">删除
+                                </button>
+                                <br/>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <br/>
+                    <ul class="homework-xz-modification-ul">
+                        <h5>二、选择题</h5>
+                        {% for question in xz_question_list %}
+                            <li>
+                                <h5><span>{{ forloop.counter }}.{{ question.1 }}</span><textarea
+                                        class="form-control" name="{{ question.0 }}">{{ question.1 }}</textarea>
+                                </h5>
+                                A.&nbsp;{{ question.2 }}<input name="question{{ question.0 }}1" class="form-control"
+                                                               value="{{ question.2 }}"/>
+                                B.&nbsp;{{ question.3 }}<input name="question{{ question.0 }}2" class="form-control"
+                                                               value="{{ question.3 }}"/>
+                                C.&nbsp;{{ question.4 }}<input name="question{{ question.0 }}3" class="form-control"
+                                                               value="{{ question.4 }}"/>
+                                D.&nbsp;{{ question.5 }}<input name="question{{ question.0 }}4" class="form-control"
+                                                               value="{{ question.5 }}"/>
+                                <input name="answer{{ question.0 }}" type="radio" value="A" {% if question.6 == 'A' %}
+                                       checked {% endif %}/>A
+                                <input name="answer{{ question.0 }}" type="radio" value="B" {% if question.6 == 'B' %}
+                                       checked {% endif %}/>B
+                                <input name="answer{{ question.0 }}" type="radio" value="C" {% if question.6 == 'C' %}
+                                       checked {% endif %}/>C
+                                <input name="answer{{ question.0 }}" type="radio" value="D" {% if question.6 == 'D' %}
+                                       checked {% endif %}/>D
+                                <button type="button" value="{{ question.0 }}" name="delete-question">删除
+                                </button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <br/>
+                    <ul>
+                        <h5>三、简答题</h5>
+                        {% for question in jd_question_list %}
+                            <li>
+                                <h5>{{ forloop.counter }}.{{ question.1 }}</h5>
+                                <textarea name="{{ question.0 }}" class="form-control">{{ question.1 }}</textarea>
+                                &nbsp;
+                                <textarea name="answer{{ question.0 }}" class="form-control">{{ question.2 }}</textarea>
+                                <button type="button" value="{{ question.0 }}" name="delete-question">删除
+                                </button>
+                                <br/>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <input type="submit" class="btn btn-primary modification-submit" value="确认修改">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

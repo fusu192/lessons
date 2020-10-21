@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}首页{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/elearnapp/index.css' %}">
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/videoapp/video.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container carousel-outer">
+        <div class="row">
+            {% csrf_token %}
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    {% for course in hot_course_list %}
+                        {% if forloop.first %}
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                        {% else %}
+                            <li data-target="#carousel-example-generic" data-slide-to="{{ forloop.counter }}"></li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    {% for course in hot_course_list %}
+                        {% if forloop.first %}
+                            <div class="item active">
+                                <a href="{% url 'video:player' %}?course={{ course.id }}&videoid={{ course.video_set.first.id }}"
+                                   class="item-carouel-img-link">
+                                    <input hidden="hidden" value="{{ course.id }}" name="courseid">
+                                    <img src="{{ course.cover.url }}" alt="...">
+                                </a>
+                                <div class="carousel-caption">
+                                    {{ course.title }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="item">
+                                <a href="{% url 'video:player' %}?course={{ course.id }}&videoid={{ course.video_set.first.id }}"
+                                   class="item-carouel-img-link">
+                                    <input hidden="hidden" value="{{ course.id }}" name="courseid">
+                                    <img src="{{ course.cover.url }}" alt="...">
+                                </a>
+                                <div class="carousel-caption">
+                                    {{ course.title }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="cate-tab-item">
+                <hr/>
+                <h3>
+                    热门课程
+                </h3>
+            </div>
+            <div class="hot-course-outer">
+                <div class="hot-course-inner">
+                    <ul class="course-card-list">
+                        {% for course in hot_course_list %}
+                            <li class="course-card-item">
+                                <a href="{% url 'video:player' %}?course={{ course.id }}&videoid={{ course.video_set.first.id }}"
+                                   class="item-img-link">
+                                    <input hidden="hidden" value="{{ course.id }}" name="courseid">
+                                    <img src="{{ course.cover.url }}">
+                                </a>
+                                <div class="item-status">
+                                    <span>视频数（{{ course.video_set.all.count }}节）</span>
+                                </div>
+                                <h4 class="item-tt">
+                                    <a href="{% url 'video:player' %}?course={{ course.id }}&videoid={{ course.video_set.first.id }}"
+                                       class="item-tt-link">{{ course.title }}</a>
+                                </h4>
+                                <div class="item-line">
+                                    {% if forloop.first %}
+                                        <span class="item-click">点击量 :
+                                            <span style="color: red">{{ course.click_nums }}</span>
+                                        </span>
+                                    {% elif forloop.counter == 2 %}
+                                        <span class="item-click">点击量 :
+                                            <span style="color: orangered">{{ course.click_nums }}</span>
+                                        </span>
+                                    {% elif forloop.counter ==  3 %}
+                                        <span class="item-click">点击量 :
+                                            <span style="color: orange">{{ course.click_nums }}</span>
+                                        </span>
+                                    {% else %}
+                                        <span class="item-click">点击量 :
+                                            <span>{{ course.click_nums }}</span>
+                                        </span>
+                                    {% endif %}
+                                    <span class="item-source">
+                                        <a href="#">{{ course.teacher.name }}</a>
+                                    </span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,6 @@
+{{ object.title }}
+{{ object.teacher.name }}
+{% for video in object.video_set.all %}
+    {{ video.title }}
+{% endfor %}
+{{ object.describe }}

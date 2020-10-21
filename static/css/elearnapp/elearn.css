@@ -1,0 +1,368 @@
+.container {
+    width: 1200px;
+}
+
+.header-index {
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.header-logo {
+    display: inline-block;
+    position: relative;
+    width: 300px;
+
+}
+
+.header-index-search {
+    position: relative;
+    display: inline-block;
+    width: 280px;
+}
+
+.header-index-search input {
+    font-size: 14px !important;
+    border-radius: 4px 0 0 4px !important;
+}
+
+.header-index-search button {
+    font-size: 14px !important;
+    border-radius: 0 4px 4px 0 !important;
+}
+
+.header-index-search button:active, .header-index-search button:focus {
+    background-color: #3971ff !important;
+}
+
+.header-index-search button, .header-index-search button:hover {
+    background-color: #12a7ff;
+}
+
+.header-index-text {
+    position: relative;
+    display: inline-block;
+    float: right;
+    padding-top: 10px;
+}
+
+.reg-log {
+    margin-right: 15px;
+}
+
+.reg-log a {
+    font-size: 16px;
+    color: #333333;
+    text-decoration: none;
+}
+
+.reg-log a:first-child:hover, .reg-log a:last-child:hover {
+    color: #12a7ff;
+}
+
+img {
+    vertical-align: 0;
+}
+
+.logo img {
+    height: 50px;
+    margin-left: 15px;
+}
+
+.nav {
+    width: 1200px;
+}
+
+.nav li > a {
+    font-size: 16px;
+    height: 46px !important;
+    line-height: 25px;
+    color: #333333;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0 !important;
+}
+
+.nav li:active > a {
+    background-color: #23b8ff !important;
+}
+
+.outer-footer {
+    margin-top: 30px;
+    width: 100%;
+    background-color: #666666;
+}
+
+.footer {
+    background-color: #666666;
+}
+
+.footer > div {
+    text-align: center;
+    width: 1200px;
+    height: 150px;
+    padding-top: 20px;
+    margin-top: 30px;
+}
+
+.footer > div > div:first-child {
+    margin-bottom: 10px;
+}
+
+.footer p {
+    font-size: 12px;
+    color: #999999;
+}
+
+.i-logo img {
+    width: 36px;
+    height: 34px;
+}
+
+.modal-content {
+    margin-top: 100px;
+    background-color: lightcyan;
+}
+
+.register-content {
+    margin-top: 50px;
+    background-color: lightcyan;
+}
+
+.resetpassword-content {
+    margin-top: 50px;
+}
+
+.head-content {
+    height: 300px;
+    margin-top: 50px;
+}
+
+
+.head-img {
+    margin-top: -34px;
+    margin-left: -15px;
+    max-width: 107.6%;
+    min-width: 105.4%;
+}
+
+.input-img {
+    height: 21px;
+    width: 21px;
+}
+
+.modal-header {
+    height: 149px;
+    border-bottom: none;
+}
+
+.modal-body {
+    padding: 0;
+}
+
+.myrow {
+    margin-top: 20px;
+    margin-bottom: 35px;
+}
+
+.form-control {
+    height: 40px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group > span {
+    height: 0;
+    color: #5fb41b;
+}
+
+.code-tip {
+    text-align: right;
+    margin-top: -30px;
+    margin-bottom: 50px;
+}
+
+.selection-id {
+    text-align: center;
+    display: block;
+    height: 15px;
+}
+
+.selection-id label {
+    font-weight: 300;
+}
+
+.selection-id label:nth-child(2) {
+    margin-left: 100px;
+}
+
+.v-code {
+    text-align: center;
+}
+
+.v-code input {
+    width: 70% !important;
+    border-radius: 4px !important;
+}
+
+.submit-menu {
+    text-align: center;
+}
+
+.submit-menu button {
+    width: 100%;
+    height: 40px;
+    background-color: #23b8ff;
+    font-size: large;
+    color: white;
+}
+
+.submit-menu button:hover {
+    color: white;
+}
+
+.submit-menu button:active {
+    background-color: #12a7ff;
+    color: #444444;
+}
+
+.profile-photo {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50%;
+    border: 1px solid #cccccc;
+}
+
+.mod-header__user-avatar {
+    height: 50px;
+}
+
+.mod-header__user-avatar a {
+    text-decoration: none;
+    color: #333333;
+    height: 100%;
+    font-size: 14px;
+    display: block;
+}
+
+.mod-header__user-avatar img {
+    vertical-align: -10px !important;
+}
+
+.reg-log-tip {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.reg-log-tip a {
+    text-decoration: none;
+    color: #12a7ff;
+}
+
+.glyphicon {
+    top: 3px;
+}
+
+.login-password-eye, .register-password-eye-1, .register-password-eye-2,
+.reset-password-eye-1, .reset-password-eye-2 {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 2px;
+    z-index: 100;
+    cursor: pointer;
+    top: 5px;
+}
+
+.dropdown-menu .divider {
+    margin: 3px 0;
+}
+
+.dropdown-menu {
+    top: 90%;
+    min-width: 100px;
+}
+
+.head-row {
+    margin-top: 10px;
+}
+
+.head-group {
+    margin-bottom: 20px;
+}
+
+.preview-picture {
+    height: 284px;
+    margin-bottom: 20px;
+    padding: 0;
+    border-radius: 0;
+    display: none;
+}
+
+.head-picture-upload {
+    padding: 4px 10px;
+    text-align: center;
+    width: 250px;
+    height: 40px;
+    margin-top: 20px;
+    line-height: 30px;
+    position: relative;
+    cursor: pointer;
+    color: #666666;
+    background: #eeeeee;
+    border: 1px solid #cccccc;
+    border-radius: 0 4px 4px 0 !important;
+    overflow: hidden;
+    float: none !important;
+}
+
+.head-picture-upload input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.head-picture-upload:hover {
+    color: #444;
+    background: #dddddd;
+    border-color: #ccc;
+    text-decoration: none
+}
+
+.head-picture-error-tip {
+    display: none;
+    margin-top: -20px;
+    color: red;
+}
+
+.college-select-outter-div > div, .specialty-select-outter-div > div {
+    width: 100% !important;
+    background-color: lightcyan;
+}
+
+.college-select-outter-div button, .specialty-select-outter-div button {
+    line-height: 2;
+    background-color: #eeeeee;
+}
+
+.college-select-outter-div .filter-option-inner-inner, .specialty-select-outter-div .filter-option-inner-inner {
+    color: #999999;
+}
+
+.college-select-outter-div .bs-searchbox, .specialty-select-outter-div .bs-searchbox {
+    display: none;
+}
+
+.dropdown-menu > li > a:hover {
+    background-color: lightskyblue;
+}
+
+#college-select, #specialty-select {
+    border-radius: 4px 4px 4px 4px !important;
+    background-color: #ffffff;
+}

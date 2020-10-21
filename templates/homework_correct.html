@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/homeworkapp/homewrok.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="correct-homework">
+                <form action="{% url 'homework:correct' %}" method="post">
+                    {% csrf_token %}
+                    <input name="studentid" value="{{ student_id }}" hidden="hidden">
+                    <ul>
+                        {% for pd in pd_list %}
+                            {% if forloop.first %}
+                                <input name="homeworkid" value="{{ pd.homework_id }}" hidden="hidden">
+                                {# 作业id #}
+                            {% endif %}
+                            <li>
+                                <h5>{{ forloop.counter }}.&nbsp;{{ pd.question }}</h5>
+                                <p>学生答案：{{ pd.answer }}</p>
+                            </li>
+
+                        {% endfor %}
+                        <hr/>
+
+                        {% for xz in xz_list %}
+                            <li>
+                                <h5>{{ forloop.counter }}.&nbsp;{{ xz.question }}</h5>
+                                <p>A.&nbsp;{{ xz.question.choice_a }}</p>
+                                <p>B.&nbsp;{{ xz.question.choice_b }}</p>
+                                <p>C.&nbsp;{{ xz.question.choice_c }}</p>
+                                <p>D.&nbsp;{{ xz.question.choice_d }}</p>
+                                <p>学生答案：{{ xz.answer }}</p>
+                            </li>
+
+                        {% endfor %}
+                        <hr/>
+
+                        {% for jd in jd_list %}
+                            <li>
+                                <h5>{{ forloop.counter }}.&nbsp;{{ jd.question }}</h5>
+                                <p>学生答案：{{ jd.answer }}</p>
+                                <input name="{{ jd.question_id }}" value="{{ jd.question_id }}" hidden="hidden">
+                                <input name="score{{ jd.question_id }}" placeholder="请输入分数">
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <input type="submit" value="提交">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

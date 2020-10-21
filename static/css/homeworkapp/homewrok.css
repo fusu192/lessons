@@ -1,0 +1,83 @@
+.homework {
+    margin-top: 15px;
+    margin-left: -40px;
+}
+
+.homework div {
+    display: inline-block;
+    width: 160px;
+}
+
+.homework div:nth-child(1) {
+    width: 300px;
+}
+
+
+.homework-name a, .homework-name a:hover {
+    text-decoration: none;
+}
+
+.homework h5 {
+    font-size: 17px;
+}
+
+.homework-hr {
+    border-color: #c7c7c7;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.homework-pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.homework-pagination a {
+    color: #23b8ff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+input[type=radio] {
+    width: 20px;
+}
+
+textarea {
+    width: 300px;
+    height: 100px;
+}
+
+input[type=submit] {
+    margin-left: 40px;
+}
+
+.correct-homework ul, .correct-homework li, .homework-item-answer ul, .homework-item-answer li,
+.homework ul, .homework li, .question ul, .question li {
+    list-style: none;
+}
+
+.homework-item-answer p, .homework-item-answer > ul > h5 {
+    margin-left: 15px;
+}
+
+.homework-item-answer > ul > p {
+    margin-left: 30px;
+}
+
+.correct-homework p {
+    margin-left: 15px;
+}
+
+.homework-pd-modification-ul > li > input:nth-child(4) , button[name="delete-question"]{
+    margin-left: 20px;
+}
+button[name="delete-question"]:hover{
+    background-color: #23b8ff;
+    border-color: #23b8ff;
+    border-style: dashed;
+}
+
+.homework-xz-modification-ul > li > input:nth-child(7), .homework-xz-modification-ul > li > input:nth-child(8),
+.homework-xz-modification-ul > li > input:nth-child(9){
+    margin-left: 20px;
+}

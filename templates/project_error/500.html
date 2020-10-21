@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>页面错误</title>
+    <style>
+        body {
+            background-color: #292c33;
+        }
+
+        .page-error-500 {
+            text-align: center;
+        }
+
+        .page-error-500 span {
+            display: block;
+            margin-top: -158px;
+            color: white;
+            font-size: 18px;
+        }
+
+        .page-error-500 a {
+            display: inline-block;
+            width: 66px;
+            font-size: 15px;
+            text-decoration: none;
+            color: orangered;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div>
+        <div class="page-error-500">
+            <img src="{% static 'images/filebg/500.jpg' %}">
+            <span>抱歉，您访问的页面有误！
+                <a href="{% url 'home:home' %}">返回首页</a>
+            </span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

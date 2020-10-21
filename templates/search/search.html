@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}视频{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/elearnapp/index.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/videoapp/video.css' %}"/>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/videoapp/video.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    {% if query %}
+        <div class="container carousel-outer">
+            <div class="row">
+                <div class="hot-course-outer">
+                    <div class="hot-course-inner">
+                        <ul class="course-card-list">
+                            {% if page %}
+                                {% for result in page.object_list %}
+                                    <li class="course-card-item">
+                                        <a href="{% url 'video:player' %}?course={{ result.object.id }}&videoid={{ result.object.video_set.first.id }}"
+                                           class="item-img-link">
+                                            <input hidden="hidden" value="{{ result.object.id }}" name="courseid">
+                                            <img src="/static/{{ result.object.cover }}">
+                                        </a>
+                                        <div class="item-status">
+                                            <span>视频数（共{{ result.object.video_set.all.count }}节）</span>
+                                        </div>
+                                        <h4 class="item-tt">
+                                            <a href="{% url 'video:player' %}?course={{ result.object.id }}&videoid={{ result.object.video_set.first.id }}"
+                                               class="item-tt-link">{{ result.object.title }}<input hidden="hidden"
+                                                                                                    value="{{ course.id }}"
+                                                                                                    name="courseid">
+                                            </a>
+                                        </h4>
+                                        <div class="item-line">
+                                            <span class="item-click">点击量 : {{ result.object.click_nums }}</span>
+                                            <span class="item-source">
+                                        <a href="#">{{ result.object.teacher.name }}</a>
+                                    </span>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <div class="reg-log-tip">
+                                    <h4>
+                                        暂无&nbsp;“<span style="color: #e85308">{{ query }}</span>”&nbsp;相关课程，请您看看其他课程吧！
+                                    </h4>
+                                </div>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="sort-page">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-lg">
+                            {% if page.has_previous %}
+                                <li>
+                                    <a href="?q={{ query }}&amp;?page={{ page.previous_page_number }}"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="disabled">
+                                    <a href="javascript:void(0)" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for page_number in paginator.page_range %}
+                                {% if page_number == paginator.num_pages %}
+                                    <li class="page_number active">
+                                        <a href="?q={{ query }}&amp;?page={{ paginator.num_pages }}" aria-label="Next"
+                                           style="background-color: #12a7ff;border-color: #12a7ff"><span
+                                                aria-hidden="true">{{ paginator.num_pages }}</span></a>
+                                    </li>
+                                {% else %}
+                                    <li class="page_number">
+                                        <a href="?q={{ query }}&amp;?page={{ paginator.num_pages }}"
+                                           aria-label="Next"><span
+                                                aria-hidden="true">{{ paginator.num_pages }}</span></a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page.has_next %}
+                                <li>
+                                    <a href="?q={{ query }}&amp;?page={{ page.next_page_number }}"
+                                       aria-label="Next"><span
+                                            aria-hidden="true">&raquo;</span></a>
+                                </li>
+                            {% else %}
+                                <li class="disabled">
+                                    <a href="javascript:void(0)" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

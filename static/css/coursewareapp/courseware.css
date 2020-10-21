@@ -1,0 +1,45 @@
+.courseware-hr {
+    border-color: #c7c7c7;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+
+.download-courseware ul, .download-courseware li {
+    list-style: none;
+}
+
+.download-courseware {
+    margin-top: 15px;
+    margin-left: -40px;
+}
+
+.download-courseware div {
+    display: inline-block;
+    width: 160px;
+}
+
+.download-courseware div:nth-child(1) {
+    display: inline-block;
+    width: 300px;
+}
+
+.download-courseware a, .download-courseware a:hover {
+    text-decoration: none;
+}
+
+.download-courseware h5 {
+    font-size: 17px;
+}
+
+.courseware-pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.courseware-pagination a {
+    color: #23b8ff;
+    text-decoration: none;
+    font-size: 16px;
+}
+

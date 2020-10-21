@@ -1,0 +1,375 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}我的{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/elearnapp/index.css' %}">
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/elearnapp/mine.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/homeworkapp/homework.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    {% if request.session.user.identity == "student" %}
+        <div class="container">
+            <div class="row">
+                <div class="homework-score">
+                    <div class="student_total_time">
+                        <span>观看视频时长：{{ total_time }}</span>
+                        <hr/>
+                    </div>
+
+                    <ul>
+                        <li>
+                            <div><h5>作业名</h5></div>
+                            <div><h5>判断提分数</h5></div>
+                            <div><h5>选择题分数</h5></div>
+                            <div><h5>简答题分数</h5></div>
+                            <div><h5>总分</h5></div>
+                            <div><h5>作答时间</h5></div>
+                        </li>
+                    </ul>
+                    <ul>
+                        {% for s in s_score %}
+                            <li>
+                                {% if s.correct == 1 %}
+                                    <div><a href="{% url 'homework:answer' %}?hid={{ s.homework_id }}" title="查看答案"
+                                            target="_blank">{{ s.homework.name }}</a></div>
+                                {% else %}
+                                    <div>{{ s.homework.name }}</div>
+                                {% endif %}
+                                <div>{{ s.pd_score }}</div>
+                                <div>{{ s.xz_score }}</div>
+                                <div>{{ s.jd_score }}</div>
+                                <div>{{ s.total }}</div>
+                                <div>{{ s.add_time }}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% elif request.session.user.identity == "teacher" %}
+        <div class="container">
+            <div class="row">
+                <div class="mine-item-title">
+                    <ul>
+                        <li style="background-color: #23b8ff"><a href="javascript:void(0)">上传视频</a></li>
+                        <li><a href="javascript:void(0)">上传课件</a></li>
+                        <li><a href="javascript:void(0)">添加作业</a></li>
+                        <li><a href="javascript:void(0)">我的作业</a></li>
+                        <li><a href="javascript:void(0)">批改作业</a></li>
+                        <li><a href="javascript:void(0)">学习详情</a></li>
+                        <li><a href="javascript:void(0)">学生分数</a></li>
+                        <li><a href="javascript:void(0)">教授专业</a></li>
+                    </ul>
+                </div>
+                <div class="mine-item-content">
+                    {# 上传课程封面 #}
+                    <div class="mine-item-add-course" hidden="hidden">
+                        <div class="mine-item-upload-video-inner">
+                            <form id="upload-course" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="text" class="form-control" name="course-name" placeholder="课程名"><span
+                                    class="course-name-tip"
+                                    style="margin-left: 5px;color: red;display: none;">请输入课程名</span>
+                                <input type="text" class="form-control" name="course-desc" placeholder="课程描述(可为空)">
+                                <a href="javascript:void(0)" class="a-upload">
+                                    <input type="file" name="course-file" accept="image/*">点击选择封面图片
+                                </a><span class="course-file-tip" style="margin-left: 5px;color: red;display: none;">请选择封面图片</span>
+                                <input type="button" class="form-control upload-course" value="添加">
+                            </form>
+                            <span class="upload-course-success" style="color: green;display: none;">上传成功！</span>
+                            <span class="upload-course-error" style="color: red;display: none;">上传失败！请重新上传</span>
+                        </div>
+                    </div>
+                    {# 上传视频 #}
+                    <div class="mine-item-upload-video">
+                        <div class="mine-item-upload-video-inner">
+                            <form id="upload-video" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <select class="selectpicker form-control" multiple data-live-search="true"
+                                        data-max-options="1" name="course-select"
+                                        data-style="btn-info" title="选择视频所属的分类">
+                                    {% for course in all_course %}
+                                        <option value="{{ course.id }}">
+                                            {{ course.title }}
+                                        </option>
+                                    {% endfor %}
+                                </select><span class="option-tip" style="margin-left: 5px;color: red;display: none;">请选择分类&nbsp;<a
+                                    class="add-course"
+                                    href="javascript:void(0)">添加</a></span>
+                                <span class="option-tip2">没有？点击<a class="add-course"
+                                                                  href="javascript:void(0)">添加</a></span>
+                                <br/>
+                                <input type="text" class="form-control" name="video-title" placeholder="视频名"><span
+                                    class="video-name-tip"
+                                    style="margin-left: 5px;color: red;display: none;">请输入视频名</span>
+                                <br/>
+                                <a href="javascript:void(0)" class="a-upload">
+                                    <input type="file" name="video-file" accept="video/*">点击选择视频文件
+                                </a><span class="video-file-tip" style="margin-left: 5px;color: red;display: none;">请选择视频文件</span>
+                                <input type="button" class="form-control upload-video" value="上传">
+                            </form>
+                            <span class="upload-video-success" style="color: green;display: none;">上传成功！</span>
+                            <span class="upload-video-error" style="color: red;display: none;">上传失败！请重新上传</span>
+                        </div>
+                    </div>
+
+
+                    {# 上传课件 #}
+                    <div class="mine-item-upload-courseware" hidden="hidden">
+                        <div class="mine-item-upload-courseware-inner">
+                            <form id="upload-courseware" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <select class="selectpicker form-control" multiple data-live-search="true"
+                                        data-max-options="1" name="courseware-specialty-select"
+                                        data-style="btn-info" title="选择专业">
+                                    {% for sp in specialtys %}
+                                        <option value="{{ sp.specialty_id }}">
+                                            {{ sp.specialty }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <span class="courseware-specialty-select-tip" style="display: none;color: red">请选择专业</span>
+                                <br/>
+                                <input type="text" class="form-control" name="courseware-name"
+                                       placeholder="课件名"><span
+                                    class="courseware-name-tip"
+                                    style="margin-left: 5px;color: red;display: none;">请输入课件名</span>
+                                <br/>
+                                <a href="javascript:void(0)" class="a-upload">
+                                    <input type="file" name="courseware-file">点击选择文件
+                                </a><span class="courseware-file-tip"
+                                          style="margin-left: 5px;color: red;display: none;">请选择文件</span>
+                                <input type="button" class="form-control upload" value="上传">
+                            </form>
+                            <span class="upload-success" style="color: green;display: none;">上传成功！</span>
+                            <span class="upload-error" style="color: red;display: none;">上传失败！请重新上传</span>
+                        </div>
+                    </div>
+
+                    {# 上传作业 #}
+                    <div class="mine-item-add-homework" hidden="hidden">
+                        <div class="mine-item-add-homework-inner">
+                            <form id="upload-homework" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <select class="selectpicker form-control" multiple data-live-search="true"
+                                        data-max-options="1" name="homework-specialty-select"
+                                        data-style="btn-info" title="选择专业">
+                                    {% for sp in specialtys %}
+                                        <option value="{{ sp.specialty_id }}">
+                                            {{ sp.specialty }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <span class="homework-specialty-select-tip" style="display: none;color: red">请选择专业</span>
+                                <br/>
+                                <input type="text" class="form-control" name="homework-name" placeholder="作业名"><span
+                                    class="homework-name-tip"
+                                    style="margin-left: 5px;color: red;display: none;">请输入作业名</span>
+                                <input type="text" class="form-control" name="homework-desc" placeholder="作业描述(可为空)">
+                                <input type="button" class="form-control upload-homework" value="添加">
+                            </form>
+                            <span class="upload-homework-success" style="color: green;display: none;">上传成功！</span>
+                            <span class="upload-homework-error" style="color: red;display: none;">上传失败！请重新上传</span>
+                        </div>
+                    </div>
+                    {# 上传题目 #}
+                    <div class="mine-item-add-questions" hidden="hidden">
+                        <div class="mine-item-add-questions-inner">
+                            <form id="add-question" method="post">
+                                {% csrf_token %}
+                                <select class="selectpicker form-control" multiple data-live-search="true"
+                                        data-max-options="1" name="homework-select"
+                                        data-style="btn-info" title="选择要添加题目的作业">
+                                    {% for homework in all_homework %}
+                                        {% if homework.release == 0 %}
+                                            <option value="{{ homework.id }}">
+                                                {{ homework.name }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select><span class="questions-option-tip"
+                                               style="margin-left: 5px;color: red;display: none;">请选择分类</span>
+                                <span class="questions-option-tip2">没有？点击<a class="add-homework"
+                                                                            href="javascript:void(0)">添加</a></span>
+                                <br/>
+                                <span class="homework-select-tip" style="color: red;display: none;">不能为空</span>
+                                <div class="select-question-type">
+                                    <span><a class="pd" href="javascript:void(0)" style="color: #12a7ff">判断题</a></span>
+                                    <span><a class="xz" href="javascript:void(0)">单项选择题</a></span>
+                                    <span><a class="jd" href="javascript:void(0)">简答题</a></span>
+                                </div>
+
+                                <div class="mine-item-pd">
+                                    <textarea class="form-control" name="pd-question" placeholder="问题描述"></textarea>
+                                    <span class="pd-question-tip" style="color: red;display: none;">问题不能为空</span>
+                                    <input type="radio" name="pd-answer" value="true">正确&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" name="pd-answer" value="false">错误
+                                    <span class="pd-answer-tip" style="color: red;display: none;">答案不能为空</span>
+                                    <input type="button" class="form-control add-pd-question" value="添加">
+                                </div>
+
+                                <div class="mine-item-xz" hidden="hidden">
+                                    <textarea class="form-control" name="xz-question" placeholder="问题描述"></textarea>
+                                    <span class="xz-question-tip" style="color: red;display: none;">问题不能为空</span>
+
+                                    <input type="text" class="form-control" name="xz-answer-A" placeholder="A选项">
+                                    <span class="xz-answer-A-tip" style="color: red;display: none;">选项不能为空</span>
+
+                                    <input type="text" class="form-control" name="xz-answer-B" placeholder="B选项">
+                                    <span class="xz-answer-B-tip" style="color: red;display: none;">选项不能为空</span>
+
+                                    <input type="text" class="form-control" name="xz-answer-C" placeholder="C选项">
+                                    <span class="xz-answer-C-tip" style="color: red;display: none;">选项不能为空</span>
+
+                                    <input type="text" class="form-control" name="xz-answer-D" placeholder="D选项">
+                                    <span class="xz-answer-D-tip" style="color: red;display: none;">选项不能为空</span>
+
+                                    <input type="radio" name="xz-answer" value="A">A&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" name="xz-answer" value="B">B&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" name="xz-answer" value="C">C&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" name="xz-answer" value="D">D
+                                    <span class="xz-answer-tip" style="color: red;display: none;">答案不能为空</span>
+                                    <input type="button" class="form-control add-xz-question" value="添加">
+                                </div>
+
+                                <div class="mine-item-jd" hidden="hidden">
+                                    <textarea class="form-control" name="jd-question" placeholder="问题描述"></textarea>
+                                    <span class="jd-question-tip" style="color: red;display: none;">问题不能为空</span>
+                                    <textarea class="form-control" name="jd-answer" placeholder="问题答案(默认为空)"></textarea>
+                                    <input type="button" class="form-control add-jd-question" value="添加">
+                                </div>
+                            </form>
+                            <span class="add-question-success" style="color: green;display: none;">添加成功！</span>
+                            <span class="add-question-error" style="color: red;display: none;">添加失败！请重新添加</span>
+                        </div>
+                    </div>
+
+                    {# 我的作业 #}
+                    <div class="mine-item-myhomework" hidden="hidden">
+                        <div class="mine-item-myhomework-inner">
+                            <ul>
+                                {% for homework in my_homework %}
+                                    <li>
+                                        <div>
+                                            <span>
+                                                {% if homework.release == 0 %}
+                                                    <a href="{% url 'homework:modification' %}?id={{ homework.id }}">{{ homework.name }}</a>
+                                                    （未发布）
+                                                {% else %}
+                                                    {{ homework.name }}（已发布）
+                                                {% endif %}</span>
+                                            <span>
+                                                {% if homework.release == 0 %}
+                                                    <button class="btn btn-sm release-homework"
+                                                            value="{{ homework.id }}">发布</button>
+                                                    <button class="btn btn-sm delete-homework"
+                                                            value="{{ homework.id }}">删除</button>
+                                                {% else %}
+                                                    <button class="btn btn-sm release-homework"
+                                                            value="{{ homework.id }}" disabled>发布</button>
+                                                    <button class="btn btn-sm delete-homework"
+                                                            value="{{ homework.id }}">删除</button>
+                                                {% endif %}</span>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {# 批改作业 #}
+                    <div class="mine-item-correct-homework" hidden="hidden">
+                        <div class="mine-item-correct-homework-inner">
+                            {% csrf_token %}
+                            <ul>
+                                {% for homework in my_homework %}
+                                    <li>
+                                        <div>
+                                            {% if homework.release == 1 %}
+                                                <input value="{{ homework.id }}" name="correct-homework-id"
+                                                       hidden="hidden">
+                                                <span><a href="javascript:void(0)"
+                                                         class="correct-homework"
+                                                         name="{{ homework.id }}">{{ homework.name }}</a></span>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {# 所有学生 #}
+                    <div class="mine-item-all-student" hidden="hidden">
+                        <div class="mine-item-all-student-inner">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    {# 学生详情 #}
+                    <div class="mine-item-student-details" hidden="hidden">
+                        <div class="mine-item-student-details-inner">
+                            <ul>
+                                {% for student in student_list %}
+                                    <li>
+                                        <div>
+                                            <span>{{ student.0 }}</span>
+                                        </div>
+                                        <div>
+                                            <span>{{ student.1 }}</span>
+                                        </div>
+                                        <div><span>观看视频时长：{{ student.2 }}</span></div>
+                                    </li>
+                                    <hr/>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {# 学生分数 #}
+                    <div class="mine-item-student-score" hidden="hidden">
+                        <div class="mine-item-student-score-inner">
+                            <ul>
+                                {% for score in all_student_score %}
+                                    <li>
+                                        <div><span>{{ score.student }}</span></div>
+                                        <div><span>作业名:{{ score.homework }}</span></div>
+                                        <div>
+                                            <span>判断:{{ score.pd_score }}&nbsp;</span>
+                                            <span>选择:{{ score.xz_score }}&nbsp;</span>
+                                            <span>简答:{{ score.jd_score }}&nbsp;</span>
+                                            <span>总分:{{ score.total }}</span>
+                                        </div>
+                                        <div><span>作答时间:{{ score.add_time }}</span></div>
+                                    </li>
+                                    <hr/>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {# 教授专业 #}
+                    <div class="mine-item-add-specialty" hidden="hidden">
+                        <div class="form-group mine-item-add-specialty-inner">
+                            <ul>
+                                {% for specialty in specialtys %}
+                                    <li>
+                                        {{ specialty.specialty.name }}
+                                    </li>
+                                    <hr/>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

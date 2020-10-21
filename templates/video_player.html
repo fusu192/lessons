@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ course_obj.title }}{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/video-js.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/videoapp/video.css' %}">
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/videoapp/video.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="video-player-container">
+                <div style="width:900px;height: 550px;">
+                    <video id="example_video_1" class="video-js vjs-default-skin" controls preload="auto" width="900"
+                           height="550" data-setup='{"example_option":true}' onended="time_function()">
+                        <source src="{{ first_video.file.url }}" type='video/mp4'/>
+                        <source src="{{ first_video.file.url }}" type='video/webm'>
+                        <source src="{{ first_video.file.url }}" type='video/ogg'>
+                        <input id="click_course" type="text" value="{{ first_video.course_id }}" hidden>
+                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a
+                            web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports
+                                HTML5 video</a></p>
+                    </video>
+                    <input class="cover" hidden value="{{ course_obj.cover }}">
+                    <input id="aa" type="text" value="0" hidden>
+                    <input id="bb" type="text" value="{{ CourseTitle }}" hidden>
+                </div>
+            </div>
+            <div class="js-task-list-section">
+                {% csrf_token %}
+                <div class="course_describe">
+                    <p>描述：{{ course_obj.describe }}</p>
+                </div>
+                <ol class="js-study-task-list">
+                    <input name="course-id" value="{{ courseid }}" hidden>
+                    {% for video in video_obj %}
+                        <li class="sub-section">
+                            <a href="{% url 'video:player' %}?course={{ video.course_id }}&videoid={{ video.id }}"
+                               data-anchor="{% url 'video:player' %}?course={{ video.course_id }}&videoid={{ video.id }}">
+                                <h5>
+                                    {{ forloop.counter }}.&nbsp;{{ video.title }}
+                                </h5>
+                            </a>
+                            <div>
+                                {% csrf_token %}
+                                <span class="task-item--suffix">{{ video.duration }}</span>
+                                {% if request.session.user.identity == 'teacher' and video.course.teacher.number == request.session.user.number %}
+                                    <button class="btn btn-sm delete-video" value="{{ video.id }}">删除</button>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+{% endblock %}

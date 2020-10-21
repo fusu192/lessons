@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}作业{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/homeworkapp/homewrok.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="homework">
+                <ul>
+                    <li>
+                        <div><h5>作业名</h5></div>
+                        <div><h5>教师</h5></div>
+                        <div><h5>说明</h5></div>
+                        <div><h5>发布时间</h5></div>
+                        <div><h5>作答人数</h5></div>
+                    </li>
+                    <hr class="homework-hr"/>
+                </ul>
+                <ul>
+                    {% for homework in all_homework %}
+                        <li>
+                            <div class="homework-name">
+                                <a href="{% url 'homework:details' %}?list={{ homework.id }}">{{ homework.name }}</a>
+                            </div>
+                            <div class="homework-teacher-name">
+                                <span>{{ homework.teacher.name }}</span>
+                            </div>
+                            <div class="homework-desc">
+                                <span>{{ homework.describe }}</span>
+                            </div>
+                            <div class="homework-time">
+                                <span>
+                                    {{ homework.add_time }}
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    {{ homework.answer_nums }}
+                                </span>
+                            </div>
+                        </li>
+                        <hr class="homework-hr"/>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="homework-pagination">
+                {% if page.has_previous %}
+                    <a href="{% url 'homework:homework' %}?page={{ 1 }}">首页</a>
+                    <a href="{% url 'homework:homework' %}?page={{ page.previous_page_number }}">上一页</a>
+                {% else %}
+                    <a style="color: #333333">首页</a>
+                    <a style="color: #333333">上一页</a>
+                {% endif %}
+
+                {% if page.has_next %}
+                    <a href="{% url 'homework:homework' %}?page={{ page.next_page_number }}">下一页</a>
+                    <a href="{% url 'homework:homework' %}?page={{ paginator.num_pages }}">末页</a>
+                {% else %}
+                    <a style="color: #333333">下一页</a>
+                    <a style="color: #333333">末页</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

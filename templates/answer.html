@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/homeworkapp/homewrok.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="homework-item-answer">
+                <ul>
+                    {% for question in pd_list %}
+                        <li>
+                            <h5>{{ forloop.counter }}.&nbsp;{{ question.context }}</h5>
+                            <p>正确答案： &nbsp;{{ question.answer }}</p>
+                        </li>
+                    {% endfor %}
+                    <h5>我的答案：</h5>
+                    {% for answer in my_pd_list %}
+                        <p>{{ forloop.counter }}.&nbsp;{{ answer }}</p>
+                    {% endfor %}
+                    <hr/>
+                    {% for question in xz_list %}
+                        <li>
+                            <h5>{{ forloop.counter }}.&nbsp;{{ question.context }}</h5>
+                            <p>A.&nbsp;{{ question.choice_a }}</p>
+                            <p>B.&nbsp;{{ question.choice_b }}</p>
+                            <p>C.&nbsp;{{ question.choice_c }}</p>
+                            <p>D.&nbsp;{{ question.choice_d }}</p>
+                            <p>正确答案： &nbsp;{{ question.answer }}</p>
+                        </li>
+                    {% endfor %}
+                    <h5>我的答案：</h5>
+                    {% for answer in my_xz_list %}
+                        <p>{{ forloop.counter }}.&nbsp;{{ answer }}</p>
+                    {% endfor %}
+                    <hr/>
+                    {% for question in jd_list %}
+                        <li>
+                            <h5>{{ forloop.counter }}.&nbsp;{{ question.context }}</h5>
+                            <p>正确答案： &nbsp;{{ question.answer }}</p>
+                        </li>
+                    {% endfor %}
+                    <h5>我的答案：</h5>
+                    {% for answer in my_jd_list %}
+                        <p>{{ forloop.counter }}.&nbsp;{{ answer }}</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

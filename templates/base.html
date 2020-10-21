@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/elearnapp/elearn.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-select/css/bootstrap-select.min.css' %}">
+    {% block css %}{% endblock %}
+
+    <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap-hover-dropdown.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-select/js/bootstrap-select.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-select/js/defaults-zh_CN.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/video.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/videojs-ie8.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/elearnapp/index.js' %}"></script>
+
+    {% block js %}{% endblock %}
+</head>
+<body>
+
+<div class="container">
+    <div class="row header-index">
+        <div class="header-logo">
+            <div class="logo">
+                <a href="{% url 'home:home' %}">
+                    <img src="{% static 'images/filebg/logo.png' %}">
+                </a>
+            </div>
+        </div>
+        <div class="header-index-search">
+            <form action="/search/">
+                <div class="input-group input-group-lg">
+                    <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="搜索视频">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"
+                            {% if request.session.user.number == null %}disabled{% endif %}>
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </form>
+        </div>
+    </div>
+    <div class="header-index-text">
+        {% if request.session.user %}
+            <div class="mod-header__user-avatar dropdown personal-center">
+                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                   data-close-others="false" data-leday="500" aria-expanded="false">
+                    <img class="profile-photo" src="/static/{{ request.session.user.photo }}">
+                    <span>{{ request.session.user.name }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a id="resethead" tabindex="-1" href="javascript:void(0)">修改头像</a></li>
+                    <li class="divider"></li>
+                    <li><a id="resetpassword" tabindex="-1" href="javascript:void(0)">修改密码</a></li>
+                    <li class="divider"></li>
+                    <li><a tabindex="-1" href="{% url 'mine:loginout' %}">退出登录</a></li>
+                </ul>
+            </div>
+        {% else %}
+            <div class="reg-log">
+                <h5>
+                    <a data-toggle="modal" id="register" href="javascript:void(0)">注册</a>
+                    <a>|</a>
+                    <a data-toggle="modal" id="login" href="javascript:void(0)">登录</a>
+                </h5>
+            </div>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div>
+            <ul class="nav nav-tabs nav-justified">
+                <li role="presentation" class="active">
+                    <a href="{% url 'home:home' %}">首页</a>
+                </li>
+                <li role="presentation">
+                    <a href="{% url 'video:video' %}">视频</a>
+                </li>
+                <li role="presentation">
+                    <a href="{% url 'courseware:courseware' %}">资料</a>
+                </li>
+                <li role="presentation">
+                    <a href="{% url 'homework:homework' %}">作业</a>
+                </li>
+                <li role="presentation">
+                    <a href="{% url 'mine:mine' %}">我的</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% if request.session.user %}
+    {% block content %}{% endblock %}
+{% else %}
+    <div class="reg-log-tip">
+        <h4>
+            你还未登录，请先
+            <a data-toggle="modal" id="goregister" href="javascript:void(0)">注册</a>
+            或
+            <a data-toggle="modal" id="gologin" href="javascript:void(0)">登录</a>
+        </h4>
+    </div>
+{% endif %}
+
+<div class="outer-footer">
+    <div class="container footer">
+        <div class="row">
+            <div class="i-logo">
+                <a href="{% url 'home:home' %}">
+                    <img src="{% static 'images/filebg/i-logo.png' %}">
+                </a>
+            </div>
+            <div>
+                <p>易学网-在线学习交流平台 保留所有权利</p>
+                <p>©&nbsp;2019&nbsp;www.elearn.com&nbsp;&nbsp;京ICP备 00000000号-00</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 注册 -->
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content register-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <img class="head-img" src="{% static 'images/filebg/register_header_night.png' %}">
+            </div>
+            <div class="modal-body">
+                <div class="row myrow">
+                    <div class="col-xs-3 col-sm-3 col-md-3"></div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 tips">
+                        <form>
+                            {% csrf_token %}
+                            <div class="form-group college-select-outter-div">
+                                <select id="college-select" class="form-control" name="college-select" title="选择你的学院">
+                                    <option value="" selected hidden>选择学院</option>
+                                    {% for college in college_obj %}
+                                        {% if forloop.first %}
+                                            <option value="{{ college.id }}">{{ college.name }}</option>
+                                        {% else %}
+                                            <option value="{{ college.id }}">{{ college.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <span class="college-select-tip" style="display: none">请选择你的学院</span>
+                            </div>
+                            <div class="form-group specialty-select-outter-div">
+
+                                <select id="specialty-select" class="form-control" name="specialty-select"
+                                        title="选择你的专业">
+                                    <option value="" selected hidden>选择专业</option>
+                                </select>
+                                <span class="specialty-select-tip" style="display: none">请选择你的专业</span>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">
+                                        <img class="input-img" src="{% static 'images/filebg/name_picture.png' %}">
+                                    </span>
+                                    <input type="text" class="form-control" name="register-name" placeholder="姓名"
+                                           aria-describedby="basic-addon1">
+                                </div>
+                                <span class="r-name-tip"></span>{# 注册姓名提示 #}
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">
+                                    <img class="input-img" src="{% static 'images/filebg/number_picture.png' %}">
+                                </span>
+                                    <input type="text" class="form-control" name="register-number" placeholder="学号"
+                                           aria-describedby="basic-addon1">
+                                </div>
+                                <span class="r-number-tip"></span>{# 注册学号提示 #}
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">
+                                    <img class="input-img" src="{% static 'images/filebg/password_picture.png' %}">
+                                </span>
+                                    <input type="password" class="form-control" placeholder="密码"
+                                           aria-describedby="basic-addon1" name="register-password">
+                                    <span class="glyphicon glyphicon-eye-close form-control-feedback register-password-eye-icon-1"
+                                          style="display:inline-block;"></span>
+                                    <span class="register-password-eye-1"></span>
+                                </div>
+                                <span class="r-password-tip"></span>{# 注册密码提示 #}
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">
+                                    <img class="input-img" src="{% static 'images/filebg/password_picture.png' %}">
+                                </span>
+                                    <input type="password" class="form-control" placeholder="确认密码"
+                                           aria-describedby="basic-addon1" name="register-password-2">
+                                    <span class="glyphicon glyphicon-eye-close form-control-feedback register-password-eye-icon-2"
+                                          style="display:inline-block;"></span>
+                                    <span class="register-password-eye-2"></span>
+                                </div>
+                                <span class="r-password-tip-2"></span>{# 确认密码提示 #}
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group selection-id">
+                                    <label><input class="r-st" type="radio" name="r-selection-id"
+                                                  value="student" checked="checked">学生</label>
+                                    <label><input class="r-st" type="radio" name="r-selection-id"
+                                                  value="teacher">教师</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group v-code" hidden>
+                                <div class="input-group">
+                                    <span><input type="text" class="form-control" name="code-tip"
+                                                 aria-describedby="basic-addon1" placeholder="请输入注册码">
+                                    </span>
+
+                                </div>
+                                <span class="code-tip"></span>{# 教师注册验证码提示 #}
+                            </div>
+                            <div class="submit-menu">
+                                <button type="button" class="btn register-submit">注&nbsp;&nbsp;&nbsp;&nbsp;册</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 登录 -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <img class="head-img" src="{% static 'images/filebg/login_header_night.png' %}">
+            </div>
+            <div class="modal-body">
+                <div class="row myrow">
+                    <div class="col-xs-3 col-sm-3 col-md-3"></div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 tips2">
+                        <form>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">
+                                    <img class="input-img" src="{% static 'images/filebg/number_picture.png' %}">
+                                </span>
+                                    <input type="text" class="form-control" placeholder="学号"
+                                           aria-describedby="basic-addon1" name="login-number">
+                                </div>
+                                <span class="l-number-tip"></span>{# 登录学号提示 #}
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">
+                                    <img class="input-img" src="{% static 'images/filebg/password_picture.png' %}">
+                                </span>
+                                    <input type="password" class="form-control" placeholder="密码"
+                                           aria-describedby="basic-addon1" name="login-password">
+                                    <span class="glyphicon glyphicon-eye-close form-control-feedback login-password-eye-icon"
+                                          style="display:inline-block;"></span>
+                                    <span class="login-password-eye"></span>
+                                </div>
+                                <span class="l-password-tip"></span>{# 登录密码提示 #}
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group selection-id">
+                                    <label><input class="l-st" type="radio" name="l-selection-id"
+                                                  value="student" checked="checked">学生</label>
+                                    <label><input class="l-st" type="radio" name="l-selection-id"
+                                                  value="teacher">教师</label>
+                                </div>
+                            </div>
+                            <div class="submit-menu">
+                                <button type="button" class="btn login-submit">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% if request.session.user %}
+    <!-- 修改密码 -->
+    <div class="modal fade" id="resetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content resetpassword-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <img class="head-img" src="{% static 'images/filebg/reset_password_header_night.png' %}">
+                </div>
+                <div class="modal-body">
+                    <div class="row myrow">
+                        <div class="col-xs-3 col-sm-3 col-md-3"></div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 tips3">
+                            <form>
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">
+                                        <img class="input-img" src="{% static 'images/filebg/name_picture.png' %}">
+                                    </span>
+                                        <input type="text" class="form-control"
+                                               placeholder="{{ request.session.user.name }}&nbsp;(联系管理员修改)"
+                                               aria-describedby="basic-addon1" disabled title="不可修改">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">
+                                    <img class="input-img" src="{% static 'images/filebg/number_picture.png' %}">
+                                </span>
+                                        <input type="text" class="form-control"
+                                               placeholder="{{ request.session.user.number }}&nbsp;(联系管理员修改)"
+                                               aria-describedby="basic-addon1" disabled title="不可修改">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">
+                                    <img class="input-img" src="{% static 'images/filebg/password_picture.png' %}">
+                                </span>
+                                        <input type="password" class="form-control" placeholder="新密码"
+                                               aria-describedby="basic-addon1" name="reset-password-1">
+                                        <span class="glyphicon glyphicon-eye-close form-control-feedback reset-password-eye-icon-1"
+                                              style="display:inline-block;"></span>
+                                        <span class="reset-password-eye-1"></span>
+                                    </div>
+                                    <span class="reset-password-tip-1"></span>{# 修改密码提示 #}
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">
+                                    <img class="input-img" src="{% static 'images/filebg/password_picture.png' %}">
+                                </span>
+                                        <input type="password" class="form-control" placeholder="确认密码"
+                                               aria-describedby="basic-addon1" name="reset-password-2">
+                                        <span class="glyphicon glyphicon-eye-close form-control-feedback reset-password-eye-icon-2"
+                                              style="display:inline-block;"></span>
+                                        <span class="reset-password-eye-2"></span>
+                                    </div>
+                                    <span class="reset-password-tip-2"></span>{# 确认密码提示 #}
+                                </div>
+                                <div class="submit-menu">
+                                    <button type="button" class="btn reset-password-submit">确&nbsp;认&nbsp;修&nbsp;改
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改头像 -->
+    <div class="modal fade" id="resetheadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content head-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <img class="head-img" src="{% static 'images/filebg/head_picture_header_night.png' %}">
+                </div>
+                <div class="modal-body">
+                    <div class="row myrow head-row">
+                        <div class="col-xs-3 col-sm-3 col-md-3"></div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 tips4">
+                            <form id="head-picture-form" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group head-group">
+                                    <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">
+                                        <img class="input-img" src="{% static 'images/filebg/head_picture.png' %}">
+                                    </span>
+                                        <a href="javascript:void(0)" class="head-picture-upload form-control">
+                                            <input type="file" name="head-picture" aria-describedby="basic-addon1"
+                                                   id="xdaTanFileImg" onchange="xmTanUploadImg(this)" accept="image/*">点击选择文件
+                                        </a>
+                                    </div>
+                                    <span class="head-picture-tip" style="margin-left: 5px;color: red;display: none;">请选择文件</span>
+                                </div>
+                                <div class="form-control preview-picture">
+                                    <img id="xmTanImg">
+                                </div>
+                                <span class="head-picture-error-tip">设置失败，请重新设置！</span>
+                                <div class="submit-menu">
+                                    <button type="button" class="btn head-picture-submit">确&nbsp;认&nbsp;修&nbsp;改
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+</body>
+</html>

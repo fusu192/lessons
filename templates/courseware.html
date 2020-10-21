@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}资料{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/coursewareapp/courseware.css' %}">
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/coursewareapp/courseware.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="download-courseware">
+                <ul>
+                    <li>
+                        <div><h5>资料名</h5></div>
+                        <div><h5>教师</h5></div>
+                        <div><h5>大小</h5></div>
+                        <div><h5>上传时间</h5></div>
+                        <div><h5>下载次数</h5></div>
+                    </li>
+                    <hr class="courseware-hr"/>
+                </ul>
+                <ul>
+                    {% for courseware in page %}
+                        <li>
+                            <div class="courseware-name">
+                                <a href="{% url 'courseware:download' %}?file={{ courseware.id }}" title="点击下载">
+                                    {{ courseware.name }}
+                                    {% csrf_token %}
+                                    <input hidden="hidden" name="courseware-id" value="{{ courseware.id }}">
+                                </a>
+                            </div>
+                            <div class="courseware-teacher-name">
+                                <span>{{ courseware.teacher.name }}</span>
+                            </div>
+                            <div class="courseware-size">
+                                <span>{{ courseware.size }}</span>
+                            </div>
+                            <div class="courseware-time">
+                                <span>{{ courseware.add_time }}</span>
+                            </div>
+                            <div class="courseware-download-nums">
+                                <span>{{ courseware.download_nums }}</span>
+                            </div>
+                            {% if request.session.user.identity == 'teacher' %}
+                                <div>
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm delete-courseware" value="{{ courseware.id }}">删除</button>
+                                </div>
+                            {% endif %}
+                        </li>
+                        <hr class="courseware-hr"/>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="courseware-pagination">
+                {% if page.has_previous %}
+                    <a href="{% url 'courseware:courseware' %}?page={{ 1 }}">首页</a>
+                    <a href="{% url 'courseware:courseware' %}?page={{ page.previous_page_number }}">上一页</a>
+                {% else %}
+                    <a style="color: #333333">首页</a>
+                    <a style="color: #333333">上一页</a>
+                {% endif %}
+
+                {% if page.has_next %}
+                    <a href="{% url 'courseware:courseware' %}?page={{ page.next_page_number }}">下一页</a>
+                    <a href="{% url 'courseware:courseware' %}?page={{ paginator.num_pages }}">末页</a>
+                {% else %}
+                    <a style="color: #333333">下一页</a>
+                    <a style="color: #333333">末页</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

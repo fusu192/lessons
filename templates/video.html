@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}视频{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/elearnapp/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/videoapp/video.css' %}">
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'js/videoapp/video.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container carousel-outer">
+        <div class="row">
+            <div class="hot-course-outer">
+                <div class="hot-course-inner">
+                    <ul class="course-card-list">
+                        {% csrf_token %}
+                        {% for course in page %}
+                            <li class="course-card-item">
+                                <a href="{% url 'video:player' %}?course={{ course.id }}&videoid={{ course.video_set.first.id }}"
+                                   class="item-img-link">
+                                    <input hidden="hidden" value="{{ course.id }}" name="courseid">
+                                    <img src="{{ course.cover.url }}">
+                                </a>
+                                <div class="item-status">
+                                    <span>视频数（共{{ course.video_set.all.count }}节）</span>
+                                </div>
+                                <h4 class="item-tt">
+                                    <a href="{% url 'video:player' %}?course={{ course.id }}&videoid={{ course.video_set.first.id }}"
+                                       class="item-tt-link">{{ course.title }}<input hidden="hidden"
+                                                                                     value="{{ course.id }}"
+                                                                                     name="courseid">
+                                    </a>
+                                </h4>
+                                <div class="item-line">
+                                    <span class="item-click">点击量 : {{ course.click_nums }}</span>
+                                    <span class="item-source">
+                                        <a href="#">{{ course.teacher.name }}</a>
+                                    </span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="sort-page">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-lg">
+                        {% if page.has_previous %}
+                            <li>
+                                <a href="{% url 'video:video' %}?page={{ page.previous_page_number }}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="javascript:void(0)" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_number in dis_range %}
+                            {% if page_num == page_number %}
+                                <li class="page_number active">
+                                    <a href="{% url 'video:video' %}?page={{ page_number }}" aria-label="Next"
+                                       style="background-color: #12a7ff;border-color: #12a7ff"><span
+                                            aria-hidden="true">{{ page_number }}</span></a>
+                                </li>
+                            {% else %}
+                                <li class="page_number">
+                                    <a href="{% url 'video:video' %}?page={{ page_number }}" aria-label="Next"><span
+                                            aria-hidden="true">{{ page_number }}</span></a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page.has_next %}
+                            <li>
+                                <a href="{% url 'video:video' %}?page={{ page.next_page_number }}"
+                                   aria-label="Next"><span
+                                        aria-hidden="true">&raquo;</span></a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="javascript:void(0)" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
